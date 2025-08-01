@@ -14,3 +14,7 @@ apart from that, to make changes in the table we must use changeColumn("tablenam
 })
 
 - when it comes to having default values. we must use  the word "defaultValue" instead of "default"
+
+since nodemailer's function was IIFE (immediately invoked function expression)
+
+It’s a JavaScript function that runs automatically as soon as it is defined, without needing to be called manually later.
