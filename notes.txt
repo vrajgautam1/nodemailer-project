@@ -1,0 +1,16 @@
+- no need for a circular reference in users and address table. 
+at first i thought that user must have id of the address in the address table 
+and address must have id of the user in the user table. 
+but no for users just say that it is associated to the address table in a hasOne relation
+and for address just keep a foreignKey as userId 
+so yeah no column for address in the address table.
+
+this is somewhat a concept of normalization (will learn more on that in the future)
+
+- when it comes to having system generated passwords and keeping some fields to be empty.
+in the model we should always keep allowNull as true otherwise it will always throw an error. 
+apart from that, to make changes in the table we must use changeColumn("tablename", "columnname", {
+    whatever changes are here
+})
+
+- when it comes to having default values. we must use  the word "defaultValue" instead of "default"
