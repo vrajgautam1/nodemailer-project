@@ -16,5 +16,26 @@ const RegisterSchema = Joi.object({
     companyName: Joi.string()
 })
 
-module.exports = {RegisterSchema}
+
+const updateSchema = Joi.object({
+  name: Joi.string().min(3).max(30),
+
+  username: Joi.string().alphanum().min(3).max(30),
+
+  companyName: Joi.string().min(2).max(50),
+
+  gender: Joi.string().valid("male", "female", "other"),
+
+  street: Joi.string().allow(""),
+
+  district: Joi.string().allow(""),
+
+  state: Joi.string().allow(""),
+
+  pincode: Joi.string().length(6),
+
+  country: Joi.string().allow("")
+});
+
+module.exports = {RegisterSchema, updateSchema}
 

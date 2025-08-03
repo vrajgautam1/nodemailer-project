@@ -28,6 +28,8 @@ module.exports = (sequelize, datatypes) => {
     country: {
       type: datatypes.STRING
     }
+  },{
+    timestamps: true
   });
 
   Address.associate = (models) => {

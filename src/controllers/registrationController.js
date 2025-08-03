@@ -1,9 +1,9 @@
 const db = require("../models");
 const Users = db.Users;
 const { RegisterSchema } = require("../validations/userValidations");
-const { sendOTP } = require("../utils/nodemailer");
+const { sendOTP, sendPassword } = require("../utils/nodemailer");
 const redisClient = require("../../config/redisClient");
-const otpGenerator = require("../utils/generateOTP")
+const {generateOTP, generatePassword} = require("../utils/otpPwGenerator");
 
 module.exports.register = async (req, res) => {
   let { error } = RegisterSchema.validate(req.body);
@@ -12,12 +12,16 @@ module.exports.register = async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
 
-  let { name, username, email, companyName } = req.body;
+  // let { name, username, email, companyName } = req.body;
+  console.log(req.body)
 
   try {
     const userExists = await Users.findOne({
       where: { email: email },
     });
+
+
+    console.log(userExists)
 
     if (userExists) {
       {
@@ -41,13 +45,14 @@ module.exports.register = async (req, res) => {
       companyName: companyName,
     });
 
+    console.log(userCreated)
     console.log("user created in the database. now sending email");
 
-    const randomNumberOTP = otpGenerator();
+    const randomNumberOTP = generateOTP();
     await sendOTP(email, randomNumberOTP);
 
     await redisClient.set(`otp:${email}`, randomNumberOTP, {
-      EX: 60 * 10,
+      EX: 60 * 2,
     });
     console.log("otp stored successfully in redis server");
 
@@ -87,9 +92,16 @@ module.exports.verifyOtp = async (req, res) => {
     }
 
     await userInDb.update({ accStatus: "active" });
+
+    let accPassword = generatePassword()
+
+    await Users.update({password: accPassword},{where:{id:userInDb.id}})
+
+    await sendPassword(email, accPassword)
+
     return res
       .status(200)
-      .json({ success: "OTP verified. User is now active." });
+      .json({ success: "OTP verified. User is now active.", checkEmail: "please check your email once again to receive your account password." });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error." });
   }
@@ -104,12 +116,27 @@ module.exports.requestNewOtp = async (req, res) => {
       return res
         .status(404)
         .json({ error: "User not found. Please register." });
+    }else if(userInDb.accStatus === "active"){
+        return res.status(400).json({userActive: "user already exists and no need for a new otp"})
     }
 
-    const randomNumberOTP = otpGenerator()
+    const otpExists = await redisClient.get(`otp:${email}`)
+    const ttl = await redisClient.ttl(`otp:${email}`);
+
+
+    if(otpExists){
+        return res.status(400).json({error: `please request a new otp after ${ttl} seconds`})
+    }
+
+    const randomNumberOTP = otpGenerator(); //first send email to user
     await sendOTP(email, randomNumberOTP);
-
-
+    await redisClient.set(`otp:${email}`, randomNumberOTP, {EX: 60*2});
+    return res
+      .status(200)
+      .json({
+        success:
+          "otp sent successfully please check your email and verify it within 2 mins",
+      });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error." });
   }

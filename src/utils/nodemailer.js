@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 async function sendOTP(to, otp) {
   try {
     const emailTemplate = fs.readFileSync(
-      path.join(__dirname, "emailTemplate.txt"),
+      path.join(__dirname, "otpEmailTemplate.txt"),
       "utf-8"
     );
     const emailBody = emailTemplate.replace("${otp}", otp);
@@ -39,7 +39,27 @@ async function sendOTP(to, otp) {
   }
 }
 
-module.exports = { sendOTP };
+async function sendPassword(to, password) {
+  try {
+    const emailTemplate = fs.readFileSync(path.join(__dirname, "pwEmailTemplate.txt"), "utf-8");
+    const emailBody = emailTemplate.replace("${password}", password);
+
+    const obj = {
+      from: '"Vraj Gautam" <gautamvraj1999@gmail.com>',
+      to: to,
+      subject: "OTP for registration",
+      text: String(password), // plain‑text body
+      html: emailBody,
+    };
+
+    const info = await transporter.sendMail(obj);
+    console.log("Message sent:", info.messageId);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+module.exports = { sendOTP, sendPassword };
 
 // const emailTemplate = fs.readFileSync(path.join(__dirname, "emailTemplate.txt"))
 // const emailBody = emailTemplate.replace("${otp}", "otp")
