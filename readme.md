@@ -19,9 +19,25 @@ This project is a robust backend system for user registration and login using OT
 - **Cache/OTP Store**: Redis
 - **Docs**: Swagger (OpenAPI 3.0)
 
-## 🚀 Setup
+## 📚 API Endpoints
 
-```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-npm install
+### 🔐 Auth & Registration
+
+| Method | Endpoint         | Description                              |
+|--------|------------------|------------------------------------------|
+| POST   | `/register`      | Register a new user & send OTP           |
+| POST   | `/verifyOtp`     | Verify OTP and activate user account     |
+| POST   | `/requestNewOtp` | Request a new OTP (if old one expired)   |
+| POST   | `/login`         | Login with email or username             |
+
+---
+
+### 👤 User Features
+
+| Method | Endpoint       | Description                                      |
+|--------|----------------|--------------------------------------------------|
+| POST   | `/update/:id`  | Update user profile and address (JWT required)  |
+
+
+## 🙌 Credits
+Built with ❤️ by **Vraj Gautam**

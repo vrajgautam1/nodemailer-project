@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const loginController = require("../controllers/loginController")
 
 /**
  * @swagger
@@ -31,7 +32,7 @@ const router = express.Router()
  *       403:
  *         description: Account inactive
  */
-router.post("/login");
+router.post("/login", loginController.login);
 
 
 module.exports = router
