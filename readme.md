@@ -1,6 +1,6 @@
 # 🛡️ User Auth System (OTP + JWT + Redis + Swagger)
 
-This project is a robust backend system for user registration and login using OTP, built with Node.js, Express, Sequelize, MySQL, Redis, and JWT.
+This project is a robust backend system for user registration and login using OTP, built with Node.js, Express, Sequelize, MySQL, Redis, Nodemailer and JWT.
 
 ## 📦 Features
 
