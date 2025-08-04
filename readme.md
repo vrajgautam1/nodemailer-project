@@ -4,7 +4,7 @@ This project is a robust backend system for user registration and login using OT
 
 ## 📦 Features
 
-- User registration via OTP (One-Time Password)
+- User registration via OTP (One-Time Password) - using **nodemailer**
 - OTP stored securely in Redis with TTL
 - User login via email or username
 - JWT token generation and validation
