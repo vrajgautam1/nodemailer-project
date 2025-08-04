@@ -1,21 +1,14 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const RegisterSchema = Joi.object({
+  name: Joi.string().min(3).max(30),
 
-    name: Joi.string().min(3).max(30),
+  username: Joi.string().alphanum().min(3).max(30).required(),
 
-    username: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
-        .required(),
+  email: Joi.string().email(),
 
-    email: Joi.string()
-        .email(),
-
-    companyName: Joi.string()
-})
-
+  companyName: Joi.string(),
+});
 
 const updateSchema = Joi.object({
   name: Joi.string().min(3).max(30),
@@ -34,8 +27,17 @@ const updateSchema = Joi.object({
 
   pincode: Joi.string().length(6),
 
-  country: Joi.string().allow("")
+  country: Joi.string().allow(""),
 });
 
-module.exports = {RegisterSchema, updateSchema}
-
+const loginSchema = Joi.object({
+  cred: Joi.alternatives().try(
+    Joi.string().email(),
+    Joi.string().alphanum().min(3).max(30)
+  ).required(),
+  password: Joi.string().required().messages({
+      "alternatives.match": `"cred" must be a valid email or username`,
+    }),
+  
+});
+module.exports = { RegisterSchema, updateSchema, loginSchema };

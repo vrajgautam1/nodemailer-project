@@ -5,7 +5,9 @@ const {updateSchema} = require("../validations/userValidations")
 
 module.exports.updateProfile = async (req, res) => {
   const userIdFromToken = req.user.id;
-  const userIdFromParams = parseInt(req.params.userId);
+  const userIdFromParams = parseInt(req.params.id);
+
+  console.log(userIdFromToken, userIdFromParams)
 
   if (userIdFromToken !== userIdFromParams) {
     return res.status(403).json({ error: "Unauthorized access to this profile." });

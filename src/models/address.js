@@ -1,42 +1,31 @@
-module.exports = (sequelize, datatypes) => {
-  const Address = sequelize.define("Address", {
+const { DataTypes } = require("sequelize");
+const sequelize = require("./db"); // ✅ get it directly
+
+const Address = sequelize.define(
+  "Address",
+  {
     id: {
-      type: datatypes.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false
+      allowNull: false,
     },
     userId: {
-      type: datatypes.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
-        model: "users",  
-        key: "id"
-      }
+        model: "Users", // Make sure the Users model name matches here
+        key: "id",
+      },
     },
-    street: {
-      type: datatypes.STRING
-    },
-    district: {
-      type: datatypes.STRING
-    },
-    state: {
-      type: datatypes.STRING
-    },
-    pincode: {
-      type: datatypes.STRING
-    },
-    country: {
-      type: datatypes.STRING
-    }
-  },{
-    timestamps: true
-  });
+    street: { type: DataTypes.STRING },
+    district: { type: DataTypes.STRING },
+    state: { type: DataTypes.STRING },
+    pincode: { type: DataTypes.STRING },
+    country: { type: DataTypes.STRING },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-  Address.associate = (models) => {
-    Address.belongsTo(models.Users, {
-      foreignKey: "userId"
-    });
-  };
-
-  return Address;
-};
+module.exports = Address;

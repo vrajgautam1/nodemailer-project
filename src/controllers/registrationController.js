@@ -4,6 +4,7 @@ const { RegisterSchema } = require("../validations/userValidations");
 const { sendOTP, sendPassword } = require("../utils/nodemailer");
 const redisClient = require("../../config/redisClient");
 const {generateOTP, generatePassword} = require("../utils/otpPwGenerator");
+const bcrypt = require("bcrypt")
 
 module.exports.register = async (req, res) => {
   let { error } = RegisterSchema.validate(req.body);
@@ -12,7 +13,7 @@ module.exports.register = async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
 
-  // let { name, username, email, companyName } = req.body;
+  let { name, username, email, companyName } = req.body;
   console.log(req.body)
 
   try {
@@ -52,11 +53,11 @@ module.exports.register = async (req, res) => {
     await sendOTP(email, randomNumberOTP);
 
     await redisClient.set(`otp:${email}`, randomNumberOTP, {
-      EX: 60 * 2,
+      EX: 60 * 10,
     });
     console.log("otp stored successfully in redis server");
 
-    res.status(200).json({
+   return res.status(200).json({
       user_created: "user created successfully",
       email_sent: "email sent successfully",
       data: userCreated,
@@ -94,8 +95,9 @@ module.exports.verifyOtp = async (req, res) => {
     await userInDb.update({ accStatus: "active" });
 
     let accPassword = generatePassword()
+    let encryptedPassword = bcrypt.hash(accPassword, 5)
 
-    await Users.update({password: accPassword},{where:{id:userInDb.id}})
+    await Users.update({password: encryptedPassword},{where:{id:userInDb.id}})
 
     await sendPassword(email, accPassword)
 

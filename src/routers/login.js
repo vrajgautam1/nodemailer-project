@@ -8,7 +8,7 @@ const loginController = require("../controllers/loginController")
  *   post:
  *     summary: Login using email or username and password
  *     tags:
- *       - Auth
+ *       - Login
  *     requestBody:
  *       required: true
  *       content:

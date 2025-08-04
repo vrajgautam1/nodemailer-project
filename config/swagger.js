@@ -40,22 +40,17 @@ const options = {
             name: { type: "string", example: "Updated Name" },
             username: { type: "string", example: "updatedUsername" },
             companyName: { type: "string", example: "Updated Company" },
-            address: {
-              type: "object",
-              properties: {
-                street: { type: "string", example: "123 Street" },
+            street: { type: "string", example: "123 Street" },
                 district: { type: "string", example: "Valsad" },
                 state: { type: "string", example: "Gujarat" },
                 pincode: { type: "string", example: "396060" },
                 country: { type: "string", example: "India" },
-              },
-            },
           },
         },
       },
     },
   },
-  apis: ["./src/routes/*.js"], // Path to your route files
+  apis: ["./src/routers/*.js"], // Path to your route files
 };
 
 const swaggerSpec = swaggerJsdoc(options);

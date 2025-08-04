@@ -9,7 +9,7 @@ const userFeatureController = require("../controllers/userFeatureController")
  *   post:
  *     summary: Update user profile (only self)
  *     tags:
- *       - User
+ *       - User Features
  *     security:
  *       - bearerAuth: []
  *     parameters:
