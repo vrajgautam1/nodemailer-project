@@ -40,4 +40,4 @@ This project is a robust backend system for user registration and login using OT
 
 
 ## 🙌 Credits
-Built with ❤️ by **Vraj Gautam**
+Made by **Vraj Gautam**
